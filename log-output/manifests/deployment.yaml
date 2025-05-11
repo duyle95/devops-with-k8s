@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logoutput-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logoutput
+  template:
+    metadata:
+      labels:
+        app: logoutput
+    spec:
+      volumes: # Define volume
+        - name: shared-log
+          emptyDir: {}
+      containers:
+        - name: log-output
+          image: duysmartum/log-output:latest
+          imagePullPolicy: Always
+          volumeMounts: # Mount volume
+          - name: shared-log
+            mountPath: /usr/src/app/files
+        - name: read-output
+          image: duysmartum/read-output:latest
+          imagePullPolicy: Always
+          volumeMounts: # Mount volume
+          - name: shared-log
+            mountPath: /usr/src/app/files
