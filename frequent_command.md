@@ -1,4 +1,5 @@
-Manage docker image
+Manage docker image in my own docker hub registry
+
 ```
 docker build . -t duysmartum/<app_name>:<tag_name>
 
@@ -6,8 +7,10 @@ docker push duysmartum/<app_name>:<tag_name>
 ```
 
 Create and manage a cluster
+
 ```
 k3d cluster create -a 2
+k3d cluster create --port 8082:30080@agent:0 -p 8081:80@loadbalancer --agents 2
 
 k3d cluster stop
 
@@ -19,20 +22,24 @@ kubectl get nodes -o wide
 ```
 
 Pods
+
 ```
 kubectl get pods -o wide
 
 kubectl logs -f <pod-name>
+kubectl logs -f <pod-name> -c <container-name>
 
 kubectl port-forward <pod-name> <local-port>:<pod-port>
 ```
 
 Import local image to k3d
+
 ```
 k3d image import <image-name>
 ```
 
 Handling deployment
+
 ```
 kubectl cluster-info
 

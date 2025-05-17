@@ -1,4 +1,4 @@
-module log-output
+module log-reader
 
 go 1.23.2
 

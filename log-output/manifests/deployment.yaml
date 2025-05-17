@@ -12,7 +12,19 @@ spec:
       labels:
         app: logoutput
     spec:
+      volumes: # Define volume
+        - name: shared-log
+          emptyDir: {}
       containers:
-        - name: log-output
-          image: duysmartum/log-output:latest
+        - name: log-generator
+          image: duysmartum/log-generator:1.10.1
           imagePullPolicy: Always
+          volumeMounts: # Mount volume
+            - name: shared-log
+              mountPath: /usr/src/app/files
+        - name: log-reader
+          image: duysmartum/log-reader:1.10.1
+          imagePullPolicy: Always
+          volumeMounts: # Mount volume
+            - name: shared-log
+              mountPath: /usr/src/app/files
