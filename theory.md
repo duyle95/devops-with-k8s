@@ -19,8 +19,6 @@ To deploy an image, we need the cluster to have access to the image. By default,
 
 Pod is an abstraction around one or more containers. Pods provide a context for 1..N containers so that they can share storage and a network. They can be thought of as a container of containers.
 
-They can be thought of as a container of containers.
-
 A deployment resource takes care of deployment. It's a way to tell Kubernetes what container you want, how they should be running and how many of them should be running.
 While we created the Deployment we also created a ReplicaSet object. ReplicaSets are used to tell how many replicas of a Pod you want
 
@@ -28,7 +26,7 @@ Instead of deleting the deployment, we could just apply a modified deployment on
 
 When updating anything in Kubernetes the usage of delete is actually an anti-pattern and you should use it only as the last option. As long as you don't delete the resource Kubernetes will do a rolling update, ensuring minimum (or none) downtime for the application.
 
-As you are trying to find bugs in your configuration start by eliminating all possibilities one by one. The key is to be systematic and to question everything.
+As you are trying to find bugs in your configuration, start by eliminating all possibilities one by one. The key is to be systematic and to question everything.
 
 As Deployment resources took care of deployments for us. Service resources will take care of serving the application to connections from outside (and also inside!) of the cluster.
 
@@ -46,4 +44,4 @@ Ingress is used to route external HTTP/S traffic to Service resources, hence the
 
 There are two things that are known to be difficult with Kubernetes. First is networking. Thankfully we can avoid most of the networking difficulties unless we were going to setup our own cluster. If you're interested you can watch this Webinar on "Kubernetes and Networks: Why is This So Dang Hard?" but we'll skip most of the topics discussed in the video. The other of the most difficult things is storage.
 
-The Kubernetes volumes, in technical terms emptyDir volumes, are shared filesystems inside a pod, this means that their lifecycle is tied to a pod. When the pod is destroyed the data is lost. In addition, simply moving the pod from another node will destroy the contents of the volume as the space is reserved from the node the pod is running on
+The Kubernetes volumes, in technical terms emptyDir volumes, are shared filesystems inside a pod, this means that their lifecycle is tied to a pod. When the pod is destroyed the data is lost. In addition, simply moving the pod from another node will destroy the contents of the volume as the space is reserved from the node the pod is running on. So surely you should not use emptyDir volumes e.g. for backing up a database
