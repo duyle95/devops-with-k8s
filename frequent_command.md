@@ -4,6 +4,13 @@ Manage docker image in my own docker hub registry
 docker build . -t duysmartum/<app_name>:<tag_name>
 
 docker push duysmartum/<app_name>:<tag_name>
+
+```
+
+Import local image to k3d
+
+```
+k3d image import <image-name>
 ```
 
 Create and manage a cluster
@@ -30,12 +37,6 @@ kubectl logs -f <pod-name>
 kubectl logs -f <pod-name> -c <container-name>
 
 kubectl port-forward <pod-name> <local-port>:<pod-port>
-```
-
-Import local image to k3d
-
-```
-k3d image import <image-name>
 ```
 
 Handling deployment

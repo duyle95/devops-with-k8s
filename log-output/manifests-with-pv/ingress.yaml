@@ -17,10 +17,10 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: pingpong-app-svc
+                name: logoutput-svc
                 port:
                   number: 2346
-          - path: /log
+          - path: /status
             pathType: Prefix
             backend:
               service:

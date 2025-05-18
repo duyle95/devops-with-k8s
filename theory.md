@@ -45,3 +45,22 @@ Ingress is used to route external HTTP/S traffic to Service resources, hence the
 There are two things that are known to be difficult with Kubernetes. First is networking. Thankfully we can avoid most of the networking difficulties unless we were going to setup our own cluster. If you're interested you can watch this Webinar on "Kubernetes and Networks: Why is This So Dang Hard?" but we'll skip most of the topics discussed in the video. The other of the most difficult things is storage.
 
 The Kubernetes volumes, in technical terms emptyDir volumes, are shared filesystems inside a pod, this means that their lifecycle is tied to a pod. When the pod is destroyed the data is lost. In addition, simply moving the pod from another node will destroy the contents of the volume as the space is reserved from the node the pod is running on. So surely you should not use emptyDir volumes e.g. for backing up a database
+
+Persistent Volumne - PV:
+In contrast to the emptyDir volumes, a Persistent Volume is something you probably had in mind when we started talking about volumes.
+
+A Persistent Volume (PV) is a cluster-wide resource, that represents a piece of storage in the cluster that has been provisioned by the cluster administrator or is dynamically provisioned. Persistent Volumes can be backed by various types of storage such as local disk, NFS, cloud storage, etc.
+
+PVs have a lifecycle independent of any individual pod that uses the PV. This means that the data in the PV can outlive the pod that it was attached to.
+
+It is the cloud provider that takes care of backing storage and the Persistent Volumes that you can use. If you run your own cluster or use a local cluster such as k3s for development, you need to take care of the storage system and Persistent Volumes by yourself.
+
+An easy option that we can use with K3s is a local PersistentVolume that uses a path in a cluster node as the storage. This solution ties the volume to a particular node and if the node becomes unavailable, the storage is not usable.
+
+So the local Persistent Volumes are not the solution to be used in production!
+
+Persistent Volume Claim (PVC) is a request for storage by a user.
+
+When a user creates a PVC, Kubernetes finds an appropriate PV that satisfies the claim's requirements and binds them together. If no PV is available, depending on the configuration, the cluster might dynamically create a PV that meets the claim's needs.
+
+Conceptually, you can think of PVs as the physical volume (the actual storage in your infrastructure), whereas PVCs are the means by which pods claim this storage for their use.
