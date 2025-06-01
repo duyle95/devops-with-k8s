@@ -13,11 +13,15 @@ const pathToImage = "/usr/src/app/files/"
 
 // const pathToImage = "./"
 
+const todoBackendURL = "http://localhost:8081/api/todos"
+
+// const todoBackendURL = "http://localhost:3006/api/todos"
+
 func main() {
 	// Get port from environment variable or use default
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "3005"
 	}
 
 	// Define a simple handler
@@ -53,6 +57,29 @@ func main() {
 			}
 		}
 
+		// // get the list of todos from the todo backend service
+		// resp, err := http.Get(todoBackendURL)
+		// if err != nil {
+		// 	http.Error(w, "Failed to fetch todos", http.StatusInternalServerError)
+		// 	log.Printf("Error fetching todos: %v", err)
+		// 	return
+		// }
+		// defer resp.Body.Close()
+		// body, err := io.ReadAll(resp.Body)
+		// if err != nil {
+		// 	http.Error(w, "Failed to read todos response", http.StatusInternalServerError)
+		// 	log.Printf("Error reading todos response: %v", err)
+		// 	return
+		// }
+
+		// var data []string
+		// err = json.Unmarshal(body, &data)
+		// if err != nil {
+		// 	http.Error(w, "Failed to parse todos response", http.StatusInternalServerError)
+		// 	log.Printf("Error parsing todos response: %v", err)
+		// 	return
+		// }
+
 		// Return a simple html response with the image
 		w.Header().Set("Content-Type", "text/html")
 		w.WriteHeader(http.StatusOK)
@@ -66,18 +93,62 @@ func main() {
 		</head>
 		<body>
 		<img src='data:image/jpeg;base64,%s' alt='Random Image' style='max-width:200px;height:200px;'>
-		<form action="/submit" method="post">
+		<form action="%s" method="post">
 			<input type="text" name="todo" placeholder="Enter your todo (max 140 characters)" maxlength="140" required>
 			<button type="submit">Send</button>
 		</form>
 		<ul>
-			<li>Todo 1</li>
-			<li>Todo 2</li>
+			
+		`, imageBody, todoBackendURL)
+		w.Write([]byte(htmlResponse))
+		// for i := 0; i < len(data); i++ {
+		// 	if string(data[i]) != "" {
+		// 		w.Write([]byte(`
+		// 			<li>` + string(data[i]) + `</li>
+		// 		`))
+		// 	}
+		// }
+		w.Write([]byte(`
 		</ul>
 		</body>
+		<script>
+			// create a script to get todos from the backend service and update the list
+			setInterval(() => {
+				fetch("` + todoBackendURL + `")
+					.then(response => response.json())
+					.then(data => {
+						const ul = document.querySelector("ul");
+						ul.innerHTML = "";
+						data.forEach(todo => {
+							if (todo) {
+								const li = document.createElement("li");
+								li.textContent = todo;
+								ul.appendChild(li);
+							}
+						});
+					})
+					.catch(error => {
+						console.error("Error fetching todos:", error);
+					});
+			}, 5000);
+			// Add a listener to the form to prevent default submission and use fetch instead
+			document.querySelector("form").addEventListener("submit", function(event) {
+				event.preventDefault();
+				const formData = new FormData(this);
+				fetch(this.action, {
+					method: "POST",
+					body: formData
+				})
+				.then(response => {
+					if (!response.ok) {
+						throw new Error("Network response was not ok");
+					}
+					return response.text();
+				})
+			})
+		</script>
 		</html>
-		`, imageBody)
-		w.Write([]byte(htmlResponse))
+		`))
 	})
 
 	// Start the server and log the port

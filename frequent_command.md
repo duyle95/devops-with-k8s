@@ -1,9 +1,7 @@
 Manage docker image in my own docker hub registry
 
 ```
-docker build . -t duysmartum/<app_name>:<tag_name>
-
-docker push duysmartum/<app_name>:<tag_name>
+docker build . -t duysmartum/<app_name>:<tag_name> && docker push duysmartum/<app_name>:<tag_name>
 
 ```
 
