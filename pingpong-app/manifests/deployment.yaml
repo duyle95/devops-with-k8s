@@ -12,7 +12,14 @@ spec:
       labels:
         app: pingpong-app
     spec:
+      # Create a temporary volume for this exercise
+      volumes: # Define volume
+        - name: shared-log
+          emptyDir: {}
       containers:
         - name: pingpong-app
           image: duysmartum/pingpong-app:latest
           imagePullPolicy: Always
+          volumeMounts: # Mount volume
+            - name: shared-log
+              mountPath: /usr/src/app/files

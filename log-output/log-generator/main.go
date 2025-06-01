@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -48,14 +49,31 @@ func main() {
 	}()
 
 	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
+		// Temporarily disable reading from file
+
+		// w.Write(fmt.Appendf(nil, "%s\n", currentString))
+		// content, err := os.ReadFile("/usr/src/app/files/pingpong.txt")
+		// if err != nil {
+		// 	log.Println("Error reading file:", err)
+		// 	http.Error(w, "Error reading file", http.StatusInternalServerError)
+		// 	return
+		// }
+		// w.Write([]byte(fmt.Sprintf("Ping / Pongs: %s\n", content)))
+
 		w.Write(fmt.Appendf(nil, "%s\n", currentString))
-		content, err := os.ReadFile("/usr/src/app/files/pingpong.txt")
+		resp, err := http.Get("http://pingpong-app-svc:2346/pingpong-count")
 		if err != nil {
-			log.Println("Error reading file:", err)
-			http.Error(w, "Error reading file", http.StatusInternalServerError)
+			log.Println("Error fetching pingpong count:", err)
+			http.Error(w, "Error fetching pingpong count", http.StatusInternalServerError)
 			return
 		}
-		w.Write([]byte(fmt.Sprintf("Ping / Pongs: %s\n", content)))
+		defer resp.Body.Close()
+		bodyBytes, err := io.ReadAll(resp.Body)
+		if err != nil {
+			panic(err)
+		}
+		bodyString := string(bodyBytes)
+		w.Write([]byte(fmt.Sprintf("Ping / Pongs: %s\n", bodyString)))
 	})
 
 	// Start the server and log the port

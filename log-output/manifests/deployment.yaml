@@ -17,13 +17,13 @@ spec:
           emptyDir: {}
       containers:
         - name: log-generator
-          image: duysmartum/log-generator:1.10.1
+          image: duysmartum/log-generator:latest
           imagePullPolicy: Always
           volumeMounts: # Mount volume
             - name: shared-log
               mountPath: /usr/src/app/files
         - name: log-reader
-          image: duysmartum/log-reader:1.10.1
+          image: duysmartum/log-reader:latest
           imagePullPolicy: Always
           volumeMounts: # Mount volume
             - name: shared-log

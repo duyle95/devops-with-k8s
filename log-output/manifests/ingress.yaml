@@ -20,7 +20,7 @@ spec:
                 name: pingpong-app-svc
                 port:
                   number: 2346
-          - path: /log
+          - path: /status
             pathType: Prefix
             backend:
               service:

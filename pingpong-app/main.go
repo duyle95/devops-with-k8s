@@ -34,6 +34,10 @@ func main() {
 		w.Write([]byte("pong " + strconv.FormatInt(count, 10)))
 	})
 
+	http.HandleFunc("/pingpong-count", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(strconv.FormatInt(count, 10)))
+	})
+
 	// Start the server and log the port
 	log.Printf("Server started on port %s", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

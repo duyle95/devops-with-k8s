@@ -1,4 +1,4 @@
-Note highlight
+Part 1
 
 Kubernetes is the sum of all the bash scripts and best practices that most system administrators would cobble together over time, presented as a single system behind a declarative set of APIs.
 
@@ -64,3 +64,11 @@ Persistent Volume Claim (PVC) is a request for storage by a user.
 When a user creates a PVC, Kubernetes finds an appropriate PV that satisfies the claim's requirements and binds them together. If no PV is available, depending on the configuration, the cluster might dynamically create a PV that meets the claim's needs.
 
 Conceptually, you can think of PVs as the physical volume (the actual storage in your infrastructure), whereas PVCs are the means by which pods claim this storage for their use.
+
+Part 2:
+
+Networking between pods
+
+Kubernetes includes a DNS service so communication between pods and containers in Kubernetes is pretty similar as it was with containers in Docker compose. Containers in a pod share the network. As such every other container inside a pod is accessible from localhost.
+
+For communication between Pods a Service is used as they expose the Pods as a network service.
