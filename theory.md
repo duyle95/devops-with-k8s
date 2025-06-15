@@ -72,3 +72,21 @@ Networking between pods
 Kubernetes includes a DNS service so communication between pods and containers in Kubernetes is pretty similar as it was with containers in Docker compose. Containers in a pod share the network. As such every other container inside a pod is accessible from localhost.
 
 For communication between Pods a Service is used as they expose the Pods as a network service.
+
+Organizing a cluster
+
+Namespaces are used to keep resources separated. A company that uses one cluster but has multiple projects can use namespaces to split the cluster into virtual clusters, one for each project. Most commonly they would be used to separate environments such as production, testing, staging. DNS entry for services includes the namespace so you can still have projects communicate with each other if needed through service.namespace address.
+
+An administrator should set a ResourceQuota(opens in a new tab) for that namespace, so that you can safely run anything there.
+
+Labels(opens in a new tab) are used to separate an application from others inside a namespace and to group different resources together. Labels are key-value pairs and they can be modified, added or removed at any time. Labels can also be added to almost anything.
+
+Labels can help us humans identify resources and Kubernetes can use them to act upon a group of resources. You can query resources that have a certain label. The labels are also used by selectors(opens in a new tab) to pick a set of objects.
+
+We can use the same label on multiple namespaces and the namespace would keep them from interfering with each other.
+
+Grouping objects with labels is simple. We either add the label into the yaml file or use command kubectl label(opens in a new tab).
+
+With labels, we can even move pods to labeled nodes. Let's say we have a few nodes which have qualities that we wish to avoid. For example, those might have a slower network. With labels and nodeSelector(opens in a new tab) configured for deployment, we can do just that.
+
+nodeSelector is a blunt tool. It's great when you want to define binary qualities, like "don't run this application if the node is using an HDD instead of an SSD" by labeling the nodes according to disk types. There are more sophisticated tools you should use when you have a cluster of various machines, ranging from a fighter jet(opens in a new tab) to a toaster to a supercomputer. Kubernetes can use affinity(opens in a new tab) and anti-affinity to select which nodes are prioritized for which applications and taints with tolerances(opens in a new tab) so that a pod can avoid certain nodes. For example, if a machine has a high network latency and we wouldn't want it to do some latency-critical tasks.

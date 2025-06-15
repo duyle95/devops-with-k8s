@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: exercises
   name: logoutput-dep
 spec:
   replicas: 1

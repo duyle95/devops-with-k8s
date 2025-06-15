@@ -26,6 +26,13 @@ k3d cluster delete
 kubectl get nodes -o wide
 ```
 
+Namespace
+
+```
+kubectl create namespace example-namespace
+kubectl config set-context --current --namespace=<name>
+```
+
 Pods
 
 ```
